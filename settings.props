@@ -1,0 +1,4 @@
+NumberOfNodes=3
+InitPubProb=0.4
+InitDwldProb=0.4
+InitScore=1
