@@ -44,7 +44,7 @@ public class Tracker {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	protected List<Node> sendPeerList() {
@@ -52,8 +52,6 @@ public class Tracker {
 		return peerList;
 	}
 
-	
-	
 	public static Properties getSettings() {
 		return settings;
 	}
