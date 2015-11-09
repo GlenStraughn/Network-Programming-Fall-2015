@@ -12,7 +12,7 @@ import java.util.Properties;
 import com.netprog.Node;
 
 /**
- * 
+ * Tracker.java: keep tracking status of each node
  */
 
 /**
@@ -21,22 +21,27 @@ import com.netprog.Node;
  */
 public class Tracker {
 
+	//list of all nodes
 	private static List<Node> nodesList = new ArrayList<>();
 
+	//a map between metadata and nodes
 	private static Map<String, NodeMetaData> nodesMetaDataMap = new HashMap<>();
 
+	//settings from the file settings.props. Can be invoked within any classes
 	private static Properties settings = new Properties();
+	
+	//file path of the settings file
+	private String settingsPath = "settings.props";
 
 	public Tracker() {
-		loadSettings();
+		loadSettings();//loading settings file when initialize the Tracker
 	}
 
 	private void loadSettings() {
-		// TODO Auto-generated method stub
 		try {
-			FileInputStream fis = new FileInputStream("settings.props");
+			FileInputStream fis = new FileInputStream(settingsPath);
 			settings.load(fis);
-			System.out.println(settings.getProperty("test"));
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,17 +52,29 @@ public class Tracker {
 
 	}
 
+	/**
+	 * 
+	 * @return a list of peers
+	 */
 	protected List<Node> sendPeerList() {
 		List<Node> peerList = new ArrayList<>();
+		
 		return peerList;
 	}
 
+	/**
+	 * @return the settings
+	 */
 	public static Properties getSettings() {
 		return settings;
 	}
 
+	/**
+	 * @param settings the settings to set
+	 */
 	public static void setSettings(Properties settings) {
 		Tracker.settings = settings;
 	}
+
 
 }
