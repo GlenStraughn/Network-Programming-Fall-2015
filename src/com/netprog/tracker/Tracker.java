@@ -96,7 +96,7 @@ public class Tracker {
 
 	
 	/**
-	 * Node client invoke this method to publish a file and increase score
+	 * Node client invoke this method to publish a file, then their score will be increased automatically
 	 * 
 	 * @param node: the node to publish this file
 	 * @param smFile
@@ -110,7 +110,7 @@ public class Tracker {
 	}
 	
 	/**
-	 * Node client invoke this method to query and download a file and decrease their score
+	 * Node client invoke this method to query and download a file,then their score will be decreased automatically
 	 * 
 	 * @param node
 	 * @param fileUID
