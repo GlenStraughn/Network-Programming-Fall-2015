@@ -94,14 +94,13 @@ public class Tracker {
 		return settings;
 	}
 
+	
 	/**
-	 * @param settings
-	 *            the settings to set
+	 * Node client invoke this method to publish a file
+	 * 
+	 * @param node: the node to publish this file
+	 * @param smFile
 	 */
-	public static void setSettings(Properties settings) {
-		Tracker.settings = settings;
-	}
-
 	public static void publishFile(Node node, SimulationFile smFile) {
 		if (!nodesList.contains(node)) {
 			addNode(node);
@@ -110,6 +109,13 @@ public class Tracker {
 		nodesMetaDataMap.get(node.NodeID).increaseScore(scoreIncrease);
 	}
 	
+	/**
+	 * Node client invoke this method to publish a file
+	 * 
+	 * @param node
+	 * @param fileUID
+	 * @return a list of node ids 
+	 */
 	public static List<Integer> queryAndDwldFile(Node node, Integer fileUID) {
 		List<Integer> resourceNodesList = new ArrayList<>();
 		if (!nodesList.contains(node)) {
@@ -131,6 +137,10 @@ public class Tracker {
 		return resourceNodesList;
 	}
 
+	/**
+	 * add a node to tracker
+	 * @param node
+	 */
 	public static void addNode(Node node) {
 		nodesList.add(node);
 		NodeMetaData nodeMetaData = new NodeMetaData(node.NodeID, initScore);
