@@ -1,6 +1,7 @@
 package com.netprog.tracker;
 
 import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.netprog.Node;
+import com.netprog.SimulationFile;
 
 /**
  * Tracker.java: keep tracking status of each node
@@ -22,10 +24,15 @@ import com.netprog.Node;
 public class Tracker {
 
 	//list of all nodes
-	private static List<Node> nodesList = new ArrayList<>();
+	private List<Node> nodesList = new ArrayList<>();
 
 	//a map between metadata and nodes
-	private static Map<String, NodeMetaData> nodesMetaDataMap = new HashMap<>();
+	private Map<String, NodeMetaData> nodesMetaDataMap = new HashMap<>();
+	
+	// Map for files and a map for listing nodes that hold said files
+	private Map<Integer, SimulationFile> fileMap;
+	private Map<Integer, ArrayList<Node>> nodesWithFile; // Nodes in the list associated with the file UID have that
+	
 
 	//settings from the file settings.props. Can be invoked within any classes
 	private static Properties settings = new Properties();
@@ -34,10 +41,10 @@ public class Tracker {
 	private String settingsPath = "settings.props";
 
 	public Tracker() {
-		loadSettings();//loading settings file when initialize the Tracker
+		loadSettings("DEFAULT");//loading settings file when initialize the Tracker
 	}
 
-	private void loadSettings() {
+	private void loadSettings(String settings) {
 		try {
 			FileInputStream fis = new FileInputStream(settingsPath);
 			settings.load(fis);
@@ -76,5 +83,8 @@ public class Tracker {
 		Tracker.settings = settings;
 	}
 
-
+	void addFile(SimulationFile file)
+	{
+		//fileMap.
+	}
 }

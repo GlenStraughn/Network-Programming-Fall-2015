@@ -6,11 +6,11 @@ public class SimulationFile {
 	public float size;//unit Mb
 	public int polularity;//range from 1 to 10
 	public int LoadAmount;//Amount Loaded
-	SimulationFile(int UID, float size, int popularity, int LoadAmount){
+	SimulationFile(int UID, float size, int popularity){
 		this.UID=UID;
 		this.size=size;
 		this.polularity=popularity;
-		this.LoadAmount=LoadAmount;
+		this.LoadAmount=0;
 		
 	}
 }
