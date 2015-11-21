@@ -29,14 +29,12 @@ public class Tracker {
 	// list of all nodes
 	private static List<Node> nodesList = new ArrayList<>();
 
-	// a map between metadata and nodes id
-	private static Map<Integer, NodeMetaData> nodesMetaDataMap = new HashMap<>();
+	// a map between nodes unique name and metadata
+	private static Map<String, NodeMetaData> nodesMetaDataMap = new HashMap<>();
 
 	// Map for files and a map for listing nodes (id) that hold said files (UID
 	// of file)
-	private static Map<Integer, Integer> filesMap;
-	// private Map<Integer, ArrayList<Node>> nodesWithFile; // Nodes in the list
-	// associated with the file UID have that
+	private static Map<SimulationFile, ArrayList<String>> filesMap;
 
 	// settings from the file settings.props. Can be invoked within any classes
 	private static Properties settings = new Properties();
@@ -115,12 +113,25 @@ public class Tracker {
 		if (!nodesList.contains(node)) {
 			addNode(node);
 		}
-		filesMap.put(node.NodeID, smFile.UID);
-		nodesMetaDataMap.get(node.NodeID).increaseScore(scoreIncrease);
-		nodesMetaDataMap.get(node.NodeID).addNumPub();
-		
-		//print the info about this node to screen
-		nodesMetaDataMap.get(node.NodeID).printNodeMetaData();
+
+		for (SimulationFile sf : filesMap.keySet()) {
+			if (sf.equals(smFile)) {
+				sf.polularity++;
+				List<String> nodesList = filesMap.get(sf);
+				if (null == nodesList) {
+					nodesList = new ArrayList<>();
+				}
+				nodesList.add(node.nodeName); // add node to file resource list
+				break;
+			}
+		}
+
+		// update meta data score and number of files published
+		nodesMetaDataMap.get(node.nodeName).increaseScore(scoreIncrease);
+		nodesMetaDataMap.get(node.nodeName).addNumPub();
+
+		// print the info about this node to screen
+		nodesMetaDataMap.get(node.nodeName).printNodeMetaData();
 	}
 
 	/**
@@ -131,28 +142,23 @@ public class Tracker {
 	 * @param fileUID
 	 * @return a list of node ids
 	 */
-	public static List<Integer> queryAndDwldFile(Node node, Integer fileUID) {
+	public static SimulationFile queryAndDwldFile(Node node, Integer fileUID) {
 		List<Integer> resourceNodesList = new ArrayList<>();
 		if (!nodesList.contains(node)) {
 			addNode(node);
 		}
-		if (filesMap.containsValue(fileUID)) {
-			Iterator<Integer> keysIterator = filesMap.keySet().iterator();
-			while (keysIterator.hasNext()) {
-				Integer key = keysIterator.next();
-				if (fileUID == filesMap.get(key)) {
-					resourceNodesList.add(key);
-				}
+		for (SimulationFile sf : filesMap.keySet()) {
+			if (sf.UID == fileUID) {
+				// update meta data score and number of files download
+				nodesMetaDataMap.get(node.nodeName).decreaseScore(scoreDecrease);
+				nodesMetaDataMap.get(node.nodeName).addNumDwln();
+				// print the info about this node to screen
+				nodesMetaDataMap.get(node.nodeName).printNodeMetaData();
+				return sf;
 			}
 		}
-		if (resourceNodesList.size() > 0) {
-			nodesMetaDataMap.get(node.NodeID).decreaseScore(scoreDecrease);
-			nodesMetaDataMap.get(node.NodeID).addNumDwln();
-		}
 
-		//print the info about this node to screen
-		nodesMetaDataMap.get(node.NodeID).printNodeMetaData();
-		return resourceNodesList;
+		return null;
 	}
 
 	/**
@@ -162,8 +168,8 @@ public class Tracker {
 	 */
 	public static void addNode(Node node) {
 		nodesList.add(node);
-		NodeMetaData nodeMetaData = new NodeMetaData(node.NodeID, initScore);
-		nodesMetaDataMap.put(node.NodeID, nodeMetaData);
+		NodeMetaData nodeMetaData = new NodeMetaData(node.nodeName, initScore);
+		nodesMetaDataMap.put(node.nodeName, nodeMetaData);
 	}
 
 	public void writeNodesInfo2csv() {

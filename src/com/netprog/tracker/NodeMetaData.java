@@ -4,14 +4,14 @@ import javax.sound.midi.Track;
 
 public class NodeMetaData {
 	private double score = 0.0;
-	private Integer nodeID;
+	private String nodeName;
 	private boolean freeRiderFlag = false;
 	private int numDwln = 0; //keep tracking the number of files node download
 	private int numPub = 0;	//keep tracking the number of files node published
 	
 
-	public NodeMetaData(Integer nodeID, double score) {
-		this.nodeID = nodeID;
+	public NodeMetaData(String nodeName, double score) {
+		this.nodeName = nodeName;
 		this.score = score;
 	}
 
@@ -42,20 +42,6 @@ public class NodeMetaData {
 		}
 	}
 	
-
-	/**
-	 * @return the nodeID
-	 */
-	public Integer getNodeID() {
-		return nodeID;
-	}
-
-	/**
-	 * @param nodeID the nodeID to set
-	 */
-	public void setNodeID(Integer nodeID) {
-		this.nodeID = nodeID;
-	}
 
 	/**
 	 * @return the freeRiderFlag
@@ -103,7 +89,7 @@ public class NodeMetaData {
 	public void printNodeMetaData(){
 		StringBuilder metaInfoBuilder = new StringBuilder();
 		metaInfoBuilder.append("Node: ");
-		metaInfoBuilder.append(nodeID);
+		metaInfoBuilder.append(nodeName);
 		metaInfoBuilder.append(", ");
 		metaInfoBuilder.append("Score: ");
 		metaInfoBuilder.append(score);
@@ -131,7 +117,7 @@ public class NodeMetaData {
 	
 	public String nodeMetaData2csv(){
 		StringBuilder metaInfoBuilder = new StringBuilder();
-		metaInfoBuilder.append(nodeID);
+		metaInfoBuilder.append(nodeName);
 		metaInfoBuilder.append(Tracker.COMMA_DELIMITER);
 		metaInfoBuilder.append(score);
 		metaInfoBuilder.append(Tracker.COMMA_DELIMITER);
@@ -143,4 +129,20 @@ public class NodeMetaData {
 		metaInfoBuilder.append(Tracker.NEW_LINE_SEPARATOR);
 		return metaInfoBuilder.toString();
 	}
+
+	/**
+	 * @return the nodeName
+	 */
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	/**
+	 * @param nodeName the nodeName to set
+	 */
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
+	}
+	
+	
 }

@@ -14,4 +14,12 @@ public class SimulationFile {
 		this.LoadAmount=0;
 		
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this.UID == ((SimulationFile)obj).UID)
+			return true;
+//		return super.equals(obj);
+		return false;
+	}
 }
