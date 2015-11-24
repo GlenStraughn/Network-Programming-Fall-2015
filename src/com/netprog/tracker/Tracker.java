@@ -127,7 +127,7 @@ public class Tracker {
 		}
 
 		// update meta data score and number of files published
-		nodesMetaDataMap.get(node.nodeName).increaseScore(scoreIncrease);
+		nodesMetaDataMap.get(node.nodeName).increaseScore(scoreIncrease*smFile.size);
 		nodesMetaDataMap.get(node.nodeName).addNumPub();
 
 		// print the info about this node to screen
@@ -143,14 +143,13 @@ public class Tracker {
 	 * @return a list of node ids
 	 */
 	public static SimulationFile queryAndDwldFile(Node node, Integer fileUID) {
-		List<Integer> resourceNodesList = new ArrayList<>();
 		if (!nodesList.contains(node)) {
 			addNode(node);
 		}
 		for (SimulationFile sf : filesMap.keySet()) {
 			if (sf.UID == fileUID) {
 				// update meta data score and number of files download
-				nodesMetaDataMap.get(node.nodeName).decreaseScore(scoreDecrease);
+				nodesMetaDataMap.get(node.nodeName).decreaseScore(scoreDecrease*sf.size);
 				nodesMetaDataMap.get(node.nodeName).addNumDwln();
 				// print the info about this node to screen
 				nodesMetaDataMap.get(node.nodeName).printNodeMetaData();

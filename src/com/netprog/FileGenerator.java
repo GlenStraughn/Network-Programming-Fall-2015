@@ -13,10 +13,12 @@ public class FileGenerator implements Runnable {
 	
 	private int nextID;
 	private int creationDelay;
+	private int elapsedTime;
 	
 	public FileGenerator(ArrayList<Node> nodeList, Tracker tracker, int timeBetweenNewFilesinMilliSec)
 	{
 		creationDelay = timeBetweenNewFilesinMilliSec;
+		elapsedTime = 0;
 		nextID = 1;
 		
 		nodes = nodeList;
@@ -31,7 +33,20 @@ public class FileGenerator implements Runnable {
 		float fileSize = rng.nextFloat()*rng.nextInt(10000);
 		
 		SimulationFile simFile = new SimulationFile(nextID, fileSize, 1); // 1 for popularity since I don't remember what it does
-		//tracker.
+		
+		boolean repeat = true;
+		do
+		{
+			int r = rng.nextInt(nodes.size());
+			Node n = nodes.get(r);
+			
+			if(rng.nextFloat() <= n.getPublicProb())
+			{
+				n.AddFile(simFile);
+				tracker.publishFile(n, simFile);
+				repeat = false;
+			}
+		}while(repeat);
 		
 		for (int i = 0; i < nodes.size(); i++)
 		{
@@ -42,24 +57,16 @@ public class FileGenerator implements Runnable {
 	@Override
 	public void run() {
 		
-		long time = Calendar.getInstance().get(Calendar.MILLISECOND);
-		
 		Random rng = new Random();
+		elapsedTime++;
 		
-		while(true)
+		if(elapsedTime >= creationDelay)
 		{
-			while(time - Calendar.getInstance().get(Calendar.MILLISECOND) < creationDelay)
-			{
-				// This space intentionally left blank
-			}
-			
-			float size = rng.nextFloat()*rng.nextInt(10000);
-			int popularity = 1;
-			SimulationFile file = new SimulationFile(nextID, size, popularity);
+			generateFile();
 			
 			nextID++;
 			
-			
+			elapsedTime = elapsedTime % creationDelay;
 		}
 	}
 }

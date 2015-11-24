@@ -48,7 +48,8 @@ public class Node implements Updatable {
 		if(dieRoll < downloadProb)
 		{
 			SimulationFile temp = tracker.queryAndDwldFile(this, fileID);
-			downloadingFiles.add(new DownloadingFile(new SimulationFile(temp.UID, temp.size, temp.polularity)));
+			DownloadingFile dFile = new DownloadingFile(new SimulationFile(temp.UID, temp.size, temp.polularity));
+			downloadingFiles.add(dFile);
 		}
 	}
 	
@@ -80,7 +81,7 @@ public class Node implements Updatable {
 					}
 				}
 			}
-			else
+			else			
 			{
 				dFile.elapsedTime++;
 			}

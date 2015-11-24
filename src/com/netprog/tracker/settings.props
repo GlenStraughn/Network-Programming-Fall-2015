@@ -1,6 +1,11 @@
-NumberOfNodes=3
 InitPubProb=0.4
 InitDwldProb=0.4
 InitScore=1
 ScoreDecrease=1
-ScoreIncrease=2
+ScoreIncrease=1.2
+
+<node>
+	name="publish1"
+	publishProb=1.0
+	downloadProb=.75
+</node>
