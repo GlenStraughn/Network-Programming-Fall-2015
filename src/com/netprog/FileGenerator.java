@@ -54,7 +54,7 @@ public class FileGenerator implements Runnable {
 			}
 			
 			float size = rng.nextFloat()*rng.nextInt(10000);
-			int popularity = rng.nextInt(10) + 1;
+			int popularity = 1;
 			SimulationFile file = new SimulationFile(nextID, size, popularity);
 			
 			nextID++;

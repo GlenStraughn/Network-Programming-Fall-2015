@@ -9,10 +9,10 @@ import com.netprog.tracker.*;
 public class Node implements Updatable {
 	public String nodeName;//Node identifier
 	private ArrayList<SimulationFile> sFile = new ArrayList<>();//list of files
-	private ArrayList<SimulationFile> downloadingFiles = new ArrayList<>();
+	private ArrayList<DownloadingFile> downloadingFiles = new ArrayList<>();
 	public ArrayList<SimulationFile> pFile = new ArrayList<>();//list of published files
-	private float publishProb=0;	 // Prob. of publishing.  Possible values on [0, 1]
-	private float downloadProb=0; // Prob. of Downloading.  Possible values on [0, 1]
+	private float publishProb=0;	// Prob. of publishing.  Possible values on [0, 1]
+	private float downloadProb=0;	// Prob. of Downloading.  Possible values on [0, 1]
 	
 	Tracker tracker;
 	
@@ -48,7 +48,7 @@ public class Node implements Updatable {
 		if(dieRoll < downloadProb)
 		{
 			SimulationFile temp = tracker.queryAndDwldFile(this, fileID);
-			downloadingFiles.add(new SimulationFile(temp.UID, temp.size, temp.polularity));
+			downloadingFiles.add(new DownloadingFile(new SimulationFile(temp.UID, temp.size, temp.polularity)));
 		}
 	}
 	
@@ -57,18 +57,47 @@ public class Node implements Updatable {
 	{
 		for(int i = 0; i < downloadingFiles.size(); i++)
 		{
-			SimulationFile sf = downloadingFiles.get(i);
-			
-			// Simulate Download
-			if(sf.LoadAmount < sf.size)
+			DownloadingFile dFile = downloadingFiles.get(i);
+			if(dFile.elapsedTime >= dFile.delay)
 			{
-				sf.LoadAmount += sf.polularity;
+				SimulationFile sf = downloadingFiles.get(i).sFile;
+				
+				// Simulate Download
+				if(sf.LoadAmount < sf.size)
+				{
+					sf.LoadAmount += sf.polularity;
+				}
+				else // Finished downloading
+				{
+					downloadingFiles.remove(i);
+					sFile.add(sf);
+					
+					Random rng = new Random();
+					
+					if(rng.nextFloat() <= publishProb) // Check if file is to be published
+					{
+						tracker.publishFile(this, sf);
+					}
+				}
 			}
-			else // Finished downloading
+			else
 			{
-				downloadingFiles.remove(i);
-				sFile.add(sf);
+				dFile.elapsedTime++;
 			}
+		}
+	}
+	
+	private class DownloadingFile // Used to track download delay
+	{
+		public int delay;
+		public int elapsedTime;
+		public SimulationFile sFile;
+		
+		public DownloadingFile(SimulationFile file)
+		{
+			sFile = file;
+			Random rng = new Random((int)(sFile.size*100)); // Wait a maximum period of 100*(time_to_download)
+			elapsedTime = 0;
 		}
 	}
 }
