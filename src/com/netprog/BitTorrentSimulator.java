@@ -32,11 +32,49 @@ public class BitTorrentSimulator {
 //	private File nodeDescFile; // Node description file
 	private int duration;
 
-	public static void main(String args[]) {
+	public BitTorrentSimulator() {
+		int duration;
 		Tracker tracker = new Tracker();
-		// ArrayList<Node> nodes; //= makeNodeList(nodeDescFile, tracker);
 		ArrayList<Node> nodes = makeNodeList(tracker);
 		
+		GeneratorThread genThread = new GeneratorThread(nodes, tracker, 1000);
+		genThread.start();
+		
+		int cycles = 0;
+		duration = 10000000;
+		while(cycles < duration)
+		{
+			for(int i = 0; i < nodes.size(); i++)
+			{
+				nodes.get(i).update();
+			}
+			cycles++;
+			
+		}
+		
+		System.exit(0); // I don't really know how/when extra threads terminate, so better safe than sorry.
+	}
+	
+//-----------------------------------------------------------------------------------------------//
+
+	public static void main(String args[])
+	{
+		BitTorrentSimulator bitSim = new BitTorrentSimulator();
+	}
+	
+	protected class GeneratorThread extends Thread
+	{
+		FileGenerator fileGen;
+		
+		public GeneratorThread(ArrayList<Node> nodeList, Tracker tracker, int waitTime)
+		{
+			fileGen = new FileGenerator(nodeList, tracker, waitTime);
+		}
+		
+		public void run()
+		{
+			fileGen.run();
+		}		
 	}
 
 	private static ArrayList<Node> makeNodeList(Tracker tracker) {
