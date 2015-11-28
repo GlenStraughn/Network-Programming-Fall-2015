@@ -52,6 +52,8 @@ public class BitTorrentSimulator {
 			
 		}
 		
+		tracker.writeNodesInfo2csv();
+		
 		System.exit(0); // I don't really know how/when extra threads terminate, so better safe than sorry.
 	}
 	
@@ -84,7 +86,7 @@ public class BitTorrentSimulator {
 		}
 
 		final String NODE_ID = "NodeID";
-		final String PUBLISH_PROB = "PublicPro";
+		final String PUBLISH_PROB = "PublishPro";
 		final String DOWNLOAD_PROB = "DownloadPro";
 		BufferedReader br = null;
 		Node newNode = null;
@@ -93,23 +95,44 @@ public class BitTorrentSimulator {
 			String tempString = "";
 			while ((tempString = br.readLine()) != null) {
 				if (NEW_NODE_BEGIN.equals(tempString.trim())) {
-					tempString = br.readLine();
-					if (null != tempString && tempString.trim().startsWith(NODE_ID)) {
-						String NodeID = tempString.split(PROPERTY_DELIMITER)[1];
-						
+					
+					boolean eof = false; // End of file.
+					
+					String NodeID = "ERROR: Name uninitialized";
+					Float publishPro = 0f;
+					Float downloadPro = 0f;
+					
+					while(!NEW_NODE_END.equals(tempString.trim()))
+					{
 						tempString = br.readLine();
-						if (null != tempString && tempString.trim().startsWith(PUBLISH_PROB)) {
-							Float PublicPro = Float.parseFloat(tempString.split(PROPERTY_DELIMITER)[1]);
-							
-							tempString = br.readLine();
-							if (null != tempString && tempString.trim().startsWith(DOWNLOAD_PROB)) {
-								Float DownloadPro = Float.parseFloat(tempString.split(PROPERTY_DELIMITER)[1]);
-								newNode = new Node(NodeID, PublicPro, DownloadPro, tracker);
-								nodesList.add(newNode);
-							}
+						if(null == tempString)
+						{
+							eof = true;
+							break;
 						}
 						
+						if (tempString.trim().startsWith(NODE_ID))
+						{
+							NodeID = tempString.split(PROPERTY_DELIMITER)[1];
+						}
+							
+						if (tempString.trim().startsWith(PUBLISH_PROB))
+						{
+							publishPro = Float.parseFloat(tempString.split(PROPERTY_DELIMITER)[1]);
+						}
+								
+						if (tempString.trim().startsWith(DOWNLOAD_PROB))
+						{
+							downloadPro = Float.parseFloat(tempString.split(PROPERTY_DELIMITER)[1]);	
+						}	
 					}
+					
+					if(!eof)
+					{
+						newNode = new Node(NodeID, publishPro, downloadPro, tracker);
+						nodesList.add(newNode);
+					}
+					
 				}
 			}
 		} catch (FileNotFoundException e) {

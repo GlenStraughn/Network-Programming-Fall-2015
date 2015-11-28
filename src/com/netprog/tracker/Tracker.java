@@ -175,7 +175,7 @@ public class Tracker {
 		FileWriter fileWriter = null;
 
 		try {
-			fileWriter = new FileWriter("" + new Date().getTime());
+			fileWriter = new FileWriter("output_" + new Date().getTime()+".csv");
 			// Write the CSV file header
 			fileWriter.append(FILE_HEADER.toString());
 
