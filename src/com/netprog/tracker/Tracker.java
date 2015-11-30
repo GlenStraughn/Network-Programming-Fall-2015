@@ -34,7 +34,7 @@ public class Tracker {
 
 	// Map for files and a map for listing nodes (id) that hold said files (UID
 	// of file)
-	private static Map<SimulationFile, ArrayList<String>> filesMap;
+	private static Map<SimulationFile, ArrayList<String>> filesMap = new HashMap<>();
 
 	// settings from the file settings.props. Can be invoked within any classes
 	private static Properties settings = new Properties();
@@ -114,8 +114,10 @@ public class Tracker {
 			addNode(node);
 		}
 
+		SimulationFile tobePublished = null;
 		for (SimulationFile sf : filesMap.keySet()) {
 			if (sf.equals(smFile)) {
+				tobePublished = sf;
 				sf.polularity++;
 				List<String> nodesList = filesMap.get(sf);
 				if (null == nodesList) {
@@ -124,6 +126,12 @@ public class Tracker {
 				nodesList.add(node.nodeName); // add node to file resource list
 				break;
 			}
+		}
+		
+		if (null == tobePublished) {
+			ArrayList<String> newList = new ArrayList<>();
+			newList.add(node.nodeName);
+			filesMap.put(smFile, newList);
 		}
 
 		// update meta data score and number of files published
