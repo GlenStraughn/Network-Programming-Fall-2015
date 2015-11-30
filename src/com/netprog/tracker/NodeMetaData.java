@@ -28,10 +28,12 @@ public class NodeMetaData {
 	
 	public void increaseScore(double increase) {
 		this.score = score + increase;
+		reCalculateFreeRider();
 	}
 	
 	public void decreaseScore(double decrease) {
 		this.score = score - decrease;
+		reCalculateFreeRider();
 	}
 
 	public void reCalculateFreeRider(){
@@ -112,7 +114,7 @@ public class NodeMetaData {
 	}
 	
 	public void addNumPub() {
-		numDwln ++;
+		numPub ++;
 	}
 	
 	public String nodeMetaData2csv(){
