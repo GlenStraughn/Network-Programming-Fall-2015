@@ -75,7 +75,10 @@ public class BitTorrentSimulator {
 		
 		public void run()
 		{
-			fileGen.run();
+			while(true)
+			{
+				fileGen.run();
+			}
 		}		
 	}
 
