@@ -51,9 +51,9 @@ public class Tracker {
 	// initial score for each nodes
 	public static int initScore = 1;
 	// the score to be decreased each time
-	public static int scoreDecrease = 1;
+	public static float scoreDecrease = 1;
 	// the score to be increased each time
-	public static int scoreIncrease = 2;
+	public static float scoreIncrease = 2;
 
 	// Delimiter used in CSV file
 	public static final String COMMA_DELIMITER = ",";
@@ -68,8 +68,8 @@ public class Tracker {
 		initPubProb = Double.parseDouble(settings.getProperty("InitPubProb"));
 		initDwldProb = Double.parseDouble(settings.getProperty("InitDwldProb"));
 		initScore = Integer.parseInt(settings.getProperty("InitScore"));
-		scoreDecrease = Integer.parseInt(settings.getProperty("ScoreDecrease"));
-		scoreIncrease = Integer.parseInt(settings.getProperty("ScoreIncrease"));
+		scoreDecrease = Float.parseFloat(settings.getProperty("ScoreDecrease"));
+		scoreIncrease = Float.parseFloat(settings.getProperty("ScoreIncrease"));
 	}
 
 	private void loadSettings() {
